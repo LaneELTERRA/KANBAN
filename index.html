@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0d0d11">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Elterra">
+<link rel="manifest" href="manifest.json">
+<title>Elterra — Project Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d11;
+    --surface: #13131a;
+    --surface2: #1a1a24;
+    --surface3: #22222f;
+    --border: #2a2a3a;
+    --border-light: #33334a;
+    --text: #e8e8f0;
+    --text-muted: #666680;
+    --text-dim: #44445a;
+    --accent: #c9a96e;
+    --accent-dim: #8a6e3e;
+
+    --track-ip: #ff6b6b;
+    --track-creative: #a78bfa;
+    --track-social: #fb923c;
+    --track-games: #38bdf8;
+    --track-career: #facc15;
+    --track-pitch: #34d399;
+
+    --col-now: #ff6b6b;
+    --col-progress: #38bdf8;
+    --col-next: #a78bfa;
+    --col-waiting: #666680;
+    --col-done: #34d399;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+  }
+
+  .header-left h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .header-left p {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .header-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 7px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.primary {
+    background: var(--accent);
+    color: #0d0d11;
+    border-color: var(--accent);
+    font-weight: 500;
+  }
+  .btn.primary:hover { background: #dbb97e; }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    gap: 16px;
+    padding: 10px 24px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    background: var(--surface);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.58rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  /* BOARD */
+  .board-wrap {
+    overflow-x: auto;
+    padding: 20px 24px 40px;
+  }
+
+  .board {
+    display: flex;
+    gap: 14px;
+    min-width: max-content;
+    align-items: flex-start;
+  }
+
+  /* COLUMN */
+  .column {
+    width: 260px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .col-header {
+    padding: 12px 14px 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .col-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .col-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .col-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .col-count {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    background: var(--surface3);
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+
+  .col-body {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-height: 60px;
+  }
+
+  /* ADD CARD BTN */
+  .add-card-btn {
+    width: 100%;
+    padding: 8px;
+    background: none;
+    border: 1px dashed var(--border);
+    border-radius: 7px;
+    color: var(--text-dim);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 2px;
+  }
+  .add-card-btn:hover { border-color: var(--accent-dim); color: var(--accent); }
+
+  /* CARD */
+  .card {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .card:hover { border-color: var(--border-light); background: var(--surface3); transform: translateY(-1px); }
+  .card.done { opacity: 0.45; }
+  .card.done .card-title { text-decoration: line-through; }
+
+  .card-track {
+    font-size: 0.55rem;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .card-track-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.35;
+    margin-bottom: 4px;
+  }
+
+  .card-note {
+    font-size: 0.63rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .card-actions {
+    display: none;
+    gap: 5px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+  .card:hover .card-actions { display: flex; }
+
+  .card-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.8px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .card-btn:hover { color: var(--text); border-color: var(--border-light); }
+  .card-btn.done-btn:hover { color: var(--col-done); border-color: var(--col-done); }
+  .card-btn.delete-btn:hover { color: var(--track-ip); border-color: var(--track-ip); }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 14px;
+    padding: 24px;
+    width: 100%;
+    max-width: 460px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .modal h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+
+  .form-group { margin-bottom: 14px; }
+  .form-group label {
+    display: block;
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 9px 12px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    outline: none;
+    transition: border 0.15s;
+    resize: vertical;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus { border-color: var(--accent-dim); }
+  .form-group select option { background: var(--surface2); }
+
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+
+  /* PROGRESS BAR */
+  .progress-bar-wrap {
+    padding: 10px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .progress-label { font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); white-space: nowrap; }
+  .progress-track { flex: 1; height: 4px; background: var(--surface3); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s ease; }
+  .progress-pct { font-size: 0.6rem; color: var(--accent); white-space: nowrap; min-width: 32px; text-align: right; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  @media (max-width: 600px) {
+    header { padding: 14px 16px; }
+    .board-wrap { padding: 14px 12px 40px; }
+    .legend { padding: 8px 16px; gap: 10px; }
+    .progress-bar-wrap { padding: 8px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>Elterra</h1>
+    <p>Project Roadmap — IP to Pitch</p>
+  </div>
+  <div class="header-right">
+    <button class="btn" onclick="toggleDone()">Toggle Done</button>
+    <button class="btn primary" onclick="openAddModal()">+ Task</button>
+  </div>
+</header>
+
+<div class="progress-bar-wrap">
+  <span class="progress-label">Overall Progress</span>
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <span class="progress-pct" id="progressPct">0%</span>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--track-ip)"></div> IP / Legal</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--track-creative)"></div> Creative</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--track-social)"></div> Social</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--track-games)"></div> Game Design</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--track-career)"></div> Career</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--track-pitch)"></div> Pitch</div>
+</div>
+
+<div class="board-wrap">
+  <div class="board" id="board"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2 id="modalTitle">Add Task</h2>
+    <div class="form-group">
+      <label>Title</label>
+      <input type="text" id="inputTitle" placeholder="Task title...">
+    </div>
+    <div class="form-group">
+      <label>Note</label>
+      <textarea id="inputNote" rows="3" placeholder="Details, context, blockers..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>Track</label>
+      <select id="inputTrack">
+        <option value="ip">IP / Legal</option>
+        <option value="creative">Creative</option>
+        <option value="social">Social</option>
+        <option value="games">Game Design</option>
+        <option value="career">Career</option>
+        <option value="pitch">Pitch</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Column</label>
+      <select id="inputColumn">
+        <option value="now">Do Now</option>
+        <option value="progress">In Progress</option>
+        <option value="next">Up Next</option>
+        <option value="waiting">Waiting / Blocked</option>
+        <option value="done">Done</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" onclick="saveCard()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const TRACKS = {
+  ip:       { label: 'IP / Legal',   color: 'var(--track-ip)' },
+  creative: { label: 'Creative',     color: 'var(--track-creative)' },
+  social:   { label: 'Social',       color: 'var(--track-social)' },
+  games:    { label: 'Game Design',  color: 'var(--track-games)' },
+  career:   { label: 'Career',       color: 'var(--track-career)' },
+  pitch:    { label: 'Pitch',        color: 'var(--track-pitch)' },
+};
+
+const COLUMNS = [
+  { id: 'now',      label: 'Do Now',           color: 'var(--col-now)' },
+  { id: 'progress', label: 'In Progress',      color: 'var(--col-progress)' },
+  { id: 'next',     label: 'Up Next',          color: 'var(--col-next)' },
+  { id: 'waiting',  label: 'Waiting / Blocked',color: 'var(--col-waiting)' },
+  { id: 'done',     label: 'Done ✓',           color: 'var(--col-done)' },
+];
+
+const DEFAULT_CARDS = [
+  // DO NOW
+  { id:'c1',  col:'now',      track:'ip',       title:'Research IP protection options',            note:'EUIPO trademark (EU-wide) before anything goes public. Covers "Tales of Elterra", "Elterra", "Neurexis".' },
+  { id:'c2',  col:'now',      track:'ip',       title:'Create dated master backup of all work',    note:'Manuscripts, lore sheets, game design notes — cloud + local. Timestamped. Legal proof of creation.' },
+  { id:'c3',  col:'now',      track:'ip',       title:'Consult IP lawyer (brief / free consult)',  note:'Before filing anything. Verify which names/terms need protection and in which classes.' },
+  { id:'c4',  col:'now',      track:'creative', title:'Write Elterra one-liner hook',              note:'"What is Elterra in 2 sentences" — needed before any pitch, post, or website goes live.' },
+  { id:'c5',  col:'now',      track:'social',   title:'Bulk-create 8–12 posts from Tale I',        note:'Creature reveals, faction breakdowns, Neyos/Sophia intro. Use AI imagery. Tale I is done — use it.' },
+  { id:'c6',  col:'now',      track:'career',   title:'Reconnect with Dynadot — find login',       note:'You have a domain. Recover access before building anything.' },
+  { id:'c7',  col:'now',      track:'games',    title:'Write down video game concept skeleton',    note:'Get it out of your head NOW. Even rough notes. Once written it becomes a blockable asset.' },
+
+  // IN PROGRESS
+  { id:'c8',  col:'progress', track:'creative', title:'Tale II — Books 3 & 4 (ep 1 of ~9 done)',  note:'Primary creative anchor. ~80 of ~600 pages done. Everything else builds around this.' },
+  { id:'c9',  col:'progress', track:'games',    title:'Card game final playtesting',               note:'Structure done. Currently optimising. Designs still needed — do not block playtesting on art.' },
+
+  // UP NEXT
+  { id:'c10', col:'next',     track:'ip',       title:'File EUIPO trademark',                      note:'~€850, covers all 27 EU countries. Do before social launch. Classes: entertainment, printed works, games.' },
+  { id:'c11', col:'next',     track:'social',   title:'Build Elterra website',                     note:'Author site: world overview, book info, card game teaser. Hosted on Dynadot domain. Claude helps build.' },
+  { id:'c12', col:'next',     track:'social',   title:'Launch Instagram + TikTok',                 note:'Start drip posting weekly from bulk-created content. Consistency over quality at this stage.' },
+  { id:'c13', col:'next',     track:'creative', title:'Polish Tale I to submittable quality',       note:'Tale I is written but needs an edit pass. This is your first portfolio piece and pitch asset.' },
+  { id:'c14', col:'next',     track:'games',    title:'Commission / AI-generate card game designs', note:'Do not block on this — mechanics first, art second. Midjourney/Stable Diffusion viable for early version.' },
+  { id:'c15', col:'next',     track:'career',   title:'Research literary agents (fantasy/transmedia)', note:'Find agents who handle dark fantasy + transmedia IP. Build a list of 20–30 targets.' },
+  { id:'c16', col:'next',     track:'pitch',    title:'Write world bible summary document',         note:'10–15 page overview: world, factions, magic system, main characters, series arc. Needed for all pitches.' },
+
+  // WAITING
+  { id:'c17', col:'waiting',  track:'ip',       title:'WIPO Madrid Protocol — extend to US',       note:'BLOCKED: do after EUIPO. Extends trademark internationally including US. Needed before US buyer approach.' },
+  { id:'c18', col:'waiting',  track:'pitch',    title:'Write query letter for literary agents',     note:'BLOCKED: needs polished Tale I + one-liner hook. One page. Hook, synopsis, comp titles, your background.' },
+  { id:'c19', col:'waiting',  track:'pitch',    title:'Submit Tale I to literary agents',           note:'BLOCKED: needs query letter + polish. Expect 6–18 months. Rejections build contact history.' },
+  { id:'c20', col:'waiting',  track:'games',    title:'Formal Game Design Document — card + board', note:'BLOCKED: finish playtesting first. Card game GDD is your strongest pitchable game asset.' },
+  { id:'c21', col:'waiting',  track:'games',    title:'Board game concept development',             note:'BLOCKED: bandwidth. Currently vision-only. Can stay that way until card game is pitchable.' },
+  { id:'c22', col:'waiting',  track:'career',   title:'Build portfolio site',                       note:'BLOCKED: needs website + polished Tale I. Simple page: about, writing, game design, Elterra overview.' },
+  { id:'c23', col:'waiting',  track:'career',   title:'Apply for junior narrative design roles',    note:'BLOCKED: needs portfolio. Use Elterra as work sample. Target: Riot, WotC, indie studios, narrative agencies.' },
+  { id:'c24', col:'waiting',  track:'pitch',    title:'Assemble full pitch package',                note:'BLOCKED: needs Tale I+II + GDD + 1000+ engaged followers + world bible. One-pager + deck + manuscripts.' },
+  { id:'c25', col:'waiting',  track:'pitch',    title:'Build Netflix pitch deck',                   note:'BLOCKED: needs agent first. Logline, synopsis, character bios, episode breakdown, AI visual moodboard, market analysis.' },
+  { id:'c26', col:'waiting',  track:'pitch',    title:'Approach WotC (games) + Netflix (series)',   note:'BLOCKED: needs agent + Tale I+II + GDD + social proof. WotC handles games, Netflix handles series — pitch tandem.' },
+  { id:'c27', col:'waiting',  track:'career',   title:'Riot Games — apply for narrative role',      note:'BLOCKED: needs portfolio + social presence. Entry via employment, not cold pitch. Elterra IS the portfolio.' },
+  { id:'c28', col:'waiting',  track:'creative', title:'Tales III–VI (Books 5–12)',                  note:'BLOCKED: finish Tale II first. Do not front-load all writing before validation. Outline is fine.' },
+
+  // DONE
+  { id:'c29', col:'done',     track:'creative', title:'Tale I written — Books 1 & 2 ✓',            note:'Complete. Needs polish pass but structurally done. First pitch and social asset.' },
+  { id:'c30', col:'done',     track:'games',    title:'Card game structure complete ✓',             note:'Core mechanics and structure done. In final playtesting phase.' },
+  { id:'c31', col:'done',     track:'creative', title:'Core lore & world bible (full) ✓',           note:'Lore sheets, constitutional documents, food cultures, character philosophies — built.' },
+  { id:'c32', col:'done',     track:'ip',       title:'Domain registered (Dynadot) ✓',             note:'Domain exists. Need to recover login and build on it.' },
+];
+
+let cards = [];
+let showDone = true;
+let editingId = null;
+
+function load() {
+  try {
+    const saved = localStorage.getItem('elterra_cards');
+    cards = saved ? JSON.parse(saved) : DEFAULT_CARDS.map(c => ({...c, done: c.col === 'done'}));
+  } catch(e) {
+    cards = DEFAULT_CARDS.map(c => ({...c, done: c.col === 'done'}));
+  }
+}
+
+function save() {
+  localStorage.setItem('elterra_cards', JSON.stringify(cards));
+}
+
+function render() {
+  const board = document.getElementById('board');
+  board.innerHTML = '';
+
+  COLUMNS.forEach(col => {
+    const colCards = cards.filter(c => c.col === col.id && (showDone || col.id !== 'done' ? true : false));
+    const visibleCards = colCards.filter(c => showDone || !c.done || c.col !== 'done');
+
+    const colEl = document.createElement('div');
+    colEl.className = 'column';
+    colEl.innerHTML = `
+      <div class="col-header">
+        <div class="col-title">
+          <div class="col-dot" style="background:${col.color}"></div>
+          <span class="col-name" style="color:${col.color}">${col.label}</span>
+        </div>
+        <span class="col-count">${visibleCards.length}</span>
+      </div>
+      <div class="col-body" id="col-${col.id}"></div>
+    `;
+    board.appendChild(colEl);
+
+    const body = colEl.querySelector('.col-body');
+
+    visibleCards.forEach(card => {
+      const track = TRACKS[card.track] || TRACKS.creative;
+      const cardEl = document.createElement('div');
+      cardEl.className = 'card' + (card.done ? ' done' : '');
+      cardEl.dataset.id = card.id;
+      cardEl.innerHTML = `
+        <div class="card-track" style="color:${track.color}">
+          <div class="card-track-dot" style="background:${track.color}"></div>
+          ${track.label}
+        </div>
+        <div class="card-title">${card.title}</div>
+        ${card.note ? `<div class="card-note">${card.note}</div>` : ''}
+        <div class="card-actions">
+          <button class="card-btn done-btn" onclick="toggleCardDone('${card.id}',event)">${card.done ? 'Undo' : '✓ Done'}</button>
+          <button class="card-btn" onclick="openEditModal('${card.id}',event)">Edit</button>
+          <button class="card-btn" onclick="moveCard('${card.id}',event)">Move</button>
+          <button class="card-btn delete-btn" onclick="deleteCard('${card.id}',event)">Delete</button>
+        </div>
+      `;
+      body.appendChild(cardEl);
+    });
+
+    const addBtn = document.createElement('button');
+    addBtn.className = 'add-card-btn';
+    addBtn.textContent = '+ Add task';
+    addBtn.onclick = () => openAddModal(col.id);
+    body.appendChild(addBtn);
+  });
+
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = cards.length;
+  const done = cards.filter(c => c.done).length;
+  const pct = total ? Math.round((done / total) * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+}
+
+function toggleCardDone(id, e) {
+  e.stopPropagation();
+  const card = cards.find(c => c.id === id);
+  if (!card) return;
+  card.done = !card.done;
+  if (card.done) card.col = 'done';
+  save(); render();
+}
+
+function deleteCard(id, e) {
+  e.stopPropagation();
+  if (!confirm('Delete this task?')) return;
+  cards = cards.filter(c => c.id !== id);
+  save(); render();
+}
+
+function moveCard(id, e) {
+  e.stopPropagation();
+  const card = cards.find(c => c.id === id);
+  if (!card) return;
+  const colIds = COLUMNS.map(c => c.id);
+  const colLabels = COLUMNS.map(c => c.label);
+  const current = colIds.indexOf(card.col);
+  const choice = prompt(`Move to column:\n${colLabels.map((l,i) => `${i+1}. ${l}`).join('\n')}\n\nEnter number (current: ${current+1}):`);
+  const idx = parseInt(choice) - 1;
+  if (idx >= 0 && idx < colIds.length) {
+    card.col = colIds[idx];
+    if (card.col === 'done') card.done = true;
+    else card.done = false;
+    save(); render();
+  }
+}
+
+let addTargetCol = 'now';
+
+function openAddModal(colId) {
+  addTargetCol = colId || 'now';
+  editingId = null;
+  document.getElementById('modalTitle').textContent = 'Add Task';
+  document.getElementById('inputTitle').value = '';
+  document.getElementById('inputNote').value = '';
+  document.getElementById('inputTrack').value = 'creative';
+  document.getElementById('inputColumn').value = addTargetCol;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('inputTitle').focus();
+}
+
+function openEditModal(id, e) {
+  if(e) e.stopPropagation();
+  const card = cards.find(c => c.id === id);
+  if (!card) return;
+  editingId = id;
+  document.getElementById('modalTitle').textContent = 'Edit Task';
+  document.getElementById('inputTitle').value = card.title;
+  document.getElementById('inputNote').value = card.note || '';
+  document.getElementById('inputTrack').value = card.track;
+  document.getElementById('inputColumn').value = card.col;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('inputTitle').focus();
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  editingId = null;
+}
+
+function saveCard() {
+  const title = document.getElementById('inputTitle').value.trim();
+  if (!title) { document.getElementById('inputTitle').focus(); return; }
+  const note = document.getElementById('inputNote').value.trim();
+  const track = document.getElementById('inputTrack').value;
+  const col = document.getElementById('inputColumn').value;
+
+  if (editingId) {
+    const card = cards.find(c => c.id === editingId);
+    if (card) { card.title = title; card.note = note; card.track = track; card.col = col; card.done = col === 'done'; }
+  } else {
+    cards.push({ id: 'c' + Date.now(), col, track, title, note, done: col === 'done' });
+  }
+  save(); render(); closeModal();
+}
+
+function toggleDone() {
+  showDone = !showDone;
+  render();
+}
+
+// Close modal on overlay click
+document.getElementById('modalOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+  if (e.key === 'Enter' && document.getElementById('modalOverlay').classList.contains('open') && e.metaKey) saveCard();
+});
+
+load();
+render();
+</script>
+</body>
+</html>
